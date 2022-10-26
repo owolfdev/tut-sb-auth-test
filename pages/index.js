@@ -14,6 +14,7 @@ const Home = () => {
           appearance={{ theme: ThemeSupa }}
           theme="dark"
           providers={["google"]}
+          magicLink
         />
       ) : (
         <Account session={session} />
