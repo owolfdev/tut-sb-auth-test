@@ -9,10 +9,21 @@ export default function Account({ session }) {
   const [username, setUsername] = useState(null);
   const [website, setWebsite] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
+  const [data, setData] = useState();
+  const [error, setError] = useState();
 
   useEffect(() => {
     getProfile();
+    getData();
   }, [session]);
+
+  useEffect(() => {
+    console.log("data:", data);
+  }, [data]);
+
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
 
   async function getProfile() {
     try {
@@ -28,6 +39,8 @@ export default function Account({ session }) {
         throw error;
       }
 
+      //console.log("data from get profile", data);
+
       if (data) {
         setUsername(data.username);
         setWebsite(data.website);
@@ -40,6 +53,15 @@ export default function Account({ session }) {
       setLoading(false);
     }
   }
+
+  const getData = async () => {
+    const { data, error } = await supabase
+      .from("tester")
+      .select(`title`)
+      .eq("author", session.user.id);
+    setData(data);
+    setError(error);
+  };
 
   async function updateProfile({ username, website, avatar_url }) {
     try {
@@ -114,6 +136,11 @@ export default function Account({ session }) {
           onClick={() => supabase.auth.signOut()}
         >
           Sign Out
+        </button>
+      </div>
+      <div>
+        <button className="button block" onClick={() => getData()}>
+          Get Data
         </button>
       </div>
     </div>
