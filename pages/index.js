@@ -1,11 +1,23 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-export default function Home() {
+const Home = () => {
+  const session = useSession();
+  const supabase = useSupabaseClient();
+
   return (
-    <div className={styles.container}>
-      <h1>Hi Ma</h1>
+    <div className="container" style={{ padding: "50px 0 100px 0" }}>
+      {!session ? (
+        <Auth
+          supabaseClient={supabase}
+          appearance={{ theme: ThemeSupa }}
+          theme="dark"
+        />
+      ) : (
+        <p>Account page will go here.</p>
+      )}
     </div>
   );
-}
+};
+
+export default Home;
